@@ -42,6 +42,7 @@ app.post('/poems', async (req, res) => {
 
 app.get('/poems', async (req, res) => {
   const poems = await Poem.find().sort({ likes: -1, date: -1 });
+  console.log('Fetched poems:', poems); // Add this line
   res.send(poems);
 });
 
