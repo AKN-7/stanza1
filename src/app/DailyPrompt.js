@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 
 const DailyPrompt = () => {
@@ -61,7 +61,7 @@ const DailyPrompt = () => {
         <select
           value={stanzaType}
           onChange={(e) => setStanzaType(e.target.value)}
-          className="p-2 text-black border rounded"
+          className="p-2 transition-all duration-500 hover:bg-gray-200 text-black border rounded"
         >
           <option value="Couplet">Couplet</option>
           <option value="Tercet">Tercet</option>
@@ -83,7 +83,7 @@ const DailyPrompt = () => {
       <div className="flex justify-center mt-4">
         <button
           onClick={handleSubmit}
-          className={`border border-black bg-white text-black p-2 rounded transition-all duration-500 ${
+          className={`border border-black bg-white text-black p-2 rounded transition-all duration-500 hover:bg-green-400 ${
             isSubmitted ? 'border-green-500 bg-green-500 text-white' : ''
           }`}
         >

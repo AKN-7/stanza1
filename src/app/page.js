@@ -8,7 +8,7 @@ export default function Home() {
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 text-center">Welcome to StanZa</h1>
         <DailyPrompt />
         <div className="mt-4">
-          <Link href="/poems" className="text-black underline">
+          <Link href="/poems" className="text-black underline transition-all duration-500 hover:text-green-400">
             View Submitted Poems
           </Link>
         </div>
