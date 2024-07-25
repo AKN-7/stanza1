@@ -11,6 +11,7 @@ const DailyPrompt = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  console.log('API_URL:', API_URL);
 
   const handleInputChange = (e) => {
     const value = e.target.value;

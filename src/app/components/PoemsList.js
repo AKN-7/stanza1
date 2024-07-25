@@ -10,11 +10,13 @@ const PoemsList = () => {
   const [password, setPassword] = useState("");
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  console.log('API_URL:', API_URL);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${API_URL}/poems`);
+        console.log('Fetched poems:', response.data);
         setPoems(response.data);
       } catch (error) {
         console.error('Error fetching poems:', error);
