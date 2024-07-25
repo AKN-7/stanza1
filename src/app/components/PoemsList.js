@@ -14,8 +14,12 @@ const PoemsList = () => {
   useEffect(() => {
     // Load poems and likes from the server on component mount
     const fetchData = async () => {
-      const response = await axios.get(`${API_URL}/poems`);
-      setPoems(response.data);
+      try {
+        const response = await axios.get(`${API_URL}/poems`);
+        setPoems(response.data);
+      } catch (error) {
+        console.error('Error fetching poems:', error);
+      }
     };
 
     fetchData();
@@ -43,12 +47,16 @@ const PoemsList = () => {
     const likedPoems = JSON.parse(localStorage.getItem('likedPoems')) || {};
 
     if (!likedPoems[poem._id]) {
-      const response = await axios.post(`${API_URL}/poems/${poem._id}/like`);
-      const updatedPoem = response.data;
-      setPoems(poems.map((p, i) => (i === index ? updatedPoem : p)));
+      try {
+        const response = await axios.post(`${API_URL}/poems/${poem._id}/like`);
+        const updatedPoem = response.data;
+        setPoems(poems.map((p, i) => (i === index ? updatedPoem : p)));
 
-      likedPoems[poem._id] = true; // Mark poem as liked
-      localStorage.setItem('likedPoems', JSON.stringify(likedPoems));
+        likedPoems[poem._id] = true; // Mark poem as liked
+        localStorage.setItem('likedPoems', JSON.stringify(likedPoems));
+      } catch (error) {
+        console.error('Error liking poem:', error);
+      }
     } else {
       alert("You have already liked this poem.");
     }

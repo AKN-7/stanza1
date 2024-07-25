@@ -13,7 +13,10 @@ app.use(cors({
   methods: ['GET', 'POST', 'DELETE'],
 }));
 
-mongoose.connect(process.env.MONGODB_URI, {
+// Use the MongoDB URI from the environment variables
+const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/stanza';
+
+mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => {
