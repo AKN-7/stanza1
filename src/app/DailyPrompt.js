@@ -35,15 +35,17 @@ const DailyPrompt = () => {
       setIsSubmitted(true); // Trigger button animation
       setTimeout(() => setIsSubmitted(false), 1000); // Reset animation state after 1 second
 
-      // Add logic to handle valid submission, e.g., save the poem
       try {
         const response = await axios.post(`${API_URL}/poems`, {
           stanzaType,
           content: inputValue,
         });
         console.log('Poem submitted:', response.data);
+        setInputValue(''); // Clear the input value on successful submission
       } catch (error) {
         console.error('Error submitting poem:', error);
+        setErrorMessage('Error submitting poem. Please try again.');
+        setTimeout(() => setErrorMessage(''), 4000); // Hide error message after 4 seconds
       }
     }
   };

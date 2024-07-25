@@ -13,10 +13,7 @@ app.use(cors({
   methods: ['GET', 'POST', 'DELETE'],
 }));
 
-// Use the MongoDB URI from the environment variables
-const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/stanza';
-
-mongoose.connect(mongoURI, {
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => {
@@ -42,7 +39,6 @@ app.post('/poems', async (req, res) => {
 
 app.get('/poems', async (req, res) => {
   const poems = await Poem.find().sort({ likes: -1, date: -1 });
-  console.log('Fetched poems:', poems); // Add this line
   res.send(poems);
 });
 
