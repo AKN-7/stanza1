@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const DailyPrompt = () => {
   const [prompt, setPrompt] = useState("Write a poem about the beauty of nature.");
@@ -8,22 +9,12 @@ const DailyPrompt = () => {
   const [inputValue, setInputValue] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [poems, setPoems] = useState([]);
-  const [submittedPoems, setSubmittedPoems] = useState({});
-
-  useEffect(() => {
-    const storedPoems = JSON.parse(localStorage.getItem('poems')) || [];
-    const storedSubmittedPoems = JSON.parse(localStorage.getItem('submittedPoems')) || {};
-    setPoems(storedPoems);
-    setSubmittedPoems(storedSubmittedPoems);
-  }, []);
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
 
-  const handleSubmit = () => {
-    const today = new Date().toISOString().split('T')[0];
+  const handleSubmit = async () => {
     const maxLines = getMaxLines(stanzaType);
     const lines = inputValue.split('\n').length;
 
@@ -31,29 +22,20 @@ const DailyPrompt = () => {
       setErrorMessage(`${stanzaType}s should have ${maxLines} lines`);
       setIsSubmitted(false);
       setTimeout(() => setErrorMessage(""), 4000);
-    } else if (submittedPoems[today]?.includes(stanzaType)) {
-      setErrorMessage(`You have already submitted a ${stanzaType} today.`);
-      setIsSubmitted(false);
-      setTimeout(() => setErrorMessage(""), 4000);
     } else {
       setErrorMessage("");
       setIsSubmitted(true);
       setTimeout(() => setIsSubmitted(false), 1000);
 
-      const newPoem = { stanzaType, content: inputValue, date: new Date().toISOString() };
-      const updatedPoems = [...poems, newPoem];
-      const updatedSubmittedPoems = {
-        ...submittedPoems,
-        [today]: [...(submittedPoems[today] || []), stanzaType],
-      };
-
-      setPoems(updatedPoems);
-      setSubmittedPoems(updatedSubmittedPoems);
-
-      localStorage.setItem('poems', JSON.stringify(updatedPoems));
-      localStorage.setItem('submittedPoems', JSON.stringify(updatedSubmittedPoems));
-
-      setInputValue('');
+      try {
+        await axios.post('http://localhost:5000/poems', {
+          stanzaType,
+          content: inputValue,
+        });
+        setInputValue('');
+      } catch (error) {
+        console.error('Error submitting poem:', error);
+      }
     }
   };
 
