@@ -16,8 +16,11 @@ const PoemsList = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${API_URL}/poems`);
-        console.log('Fetched poems:', response.data); // Add this line
-        setPoems(response.data);
+        if (Array.isArray(response.data)) {
+          setPoems(response.data);
+        } else {
+          console.error('Fetched data is not an array:', response.data);
+        }
       } catch (error) {
         console.error('Error fetching poems:', error);
       }
