@@ -32,26 +32,46 @@ const poemSchema = new mongoose.Schema({
 const Poem = mongoose.model('Poem', poemSchema);
 
 app.post('/poems', async (req, res) => {
-  const poem = new Poem(req.body);
-  await poem.save();
-  res.status(201).send(poem);
+  try {
+    const poem = new Poem(req.body);
+    await poem.save();
+    res.status(201).send(poem);
+  } catch (error) {
+    console.error('Error saving poem:', error);
+    res.status(500).send({ message: 'Error saving poem' });
+  }
 });
 
 app.get('/poems', async (req, res) => {
-  const poems = await Poem.find().sort({ likes: -1, date: -1 });
-  res.send(poems);
+  try {
+    const poems = await Poem.find().sort({ likes: -1, date: -1 });
+    res.send(poems);
+  } catch (error) {
+    console.error('Error fetching poems:', error);
+    res.status(500).send({ message: 'Error fetching poems' });
+  }
 });
 
 app.post('/poems/:id/like', async (req, res) => {
-  const poem = await Poem.findById(req.params.id);
-  poem.likes += 1;
-  await poem.save();
-  res.send(poem);
+  try {
+    const poem = await Poem.findById(req.params.id);
+    poem.likes += 1;
+    await poem.save();
+    res.send(poem);
+  } catch (error) {
+    console.error('Error liking poem:', error);
+    res.status(500).send({ message: 'Error liking poem' });
+  }
 });
 
 app.delete('/poems', async (req, res) => {
-  await Poem.deleteMany({});
-  res.status(200).send({ message: 'All poems cleared' });
+  try {
+    await Poem.deleteMany({});
+    res.status(200).send({ message: 'All poems cleared' });
+  } catch (error) {
+    console.error('Error clearing poems:', error);
+    res.status(500).send({ message: 'Error clearing poems' });
+  }
 });
 
 app.listen(PORT, () => {
