@@ -85,17 +85,17 @@ const PoemsList = () => {
           </div>
         ))
       )}
-      <div className="fixed scale-50 bottom-4 right-12 ml-5  rounded">
+      <div className="fixed bottom-4 right-4 p-2 border rounded bg-white">
         <input
           type="password"
           placeholder="Admin password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="mb-2 p-1 "
+          className="mb-2 p-1 border rounded"
         />
         <button
           onClick={handleClearStorage}
-          className=" bg-white text-black p-1 rounded"
+          className="border border-black bg-white text-black p-1 rounded"
         >
           Clear Poems
         </button>
