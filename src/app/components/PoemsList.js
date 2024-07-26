@@ -3,20 +3,19 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const adminPassword = "diesel";
+const adminPassword = "diesel"; // Admin password
 
 const PoemsList = () => {
   const [poems, setPoems] = useState([]);
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState(""); // State to manage the password
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
-  console.log('API_URL:', API_URL);
 
   useEffect(() => {
+    // Load poems and likes from the server on component mount
     const fetchData = async () => {
       try {
         const response = await axios.get(`${API_URL}/poems`);
-        console.log('Fetched poems:', response.data);
         setPoems(response.data);
       } catch (error) {
         console.error('Error fetching poems:', error);
@@ -24,17 +23,17 @@ const PoemsList = () => {
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 5000);
+    const interval = setInterval(fetchData, 5000); // Poll every 5 seconds
 
-    return () => clearInterval(interval);
+    return () => clearInterval(interval); // Clean up interval on unmount
   }, [API_URL]);
 
   const handleClearStorage = async () => {
     if (password === adminPassword) {
       try {
-        await axios.delete(`${API_URL}/poems`);
+        await axios.delete(`${API_URL}/poems`); // Ensure this matches the backend route
         setPoems([]);
-        localStorage.removeItem('likedPoems');
+        localStorage.removeItem('likedPoems'); // Clear liked poems
       } catch (error) {
         console.error('Error clearing poems:', error);
       }
@@ -53,7 +52,7 @@ const PoemsList = () => {
         const updatedPoem = response.data;
         setPoems(poems.map((p, i) => (i === index ? updatedPoem : p)));
 
-        likedPoems[poem._id] = true;
+        likedPoems[poem._id] = true; // Mark poem as liked
         localStorage.setItem('likedPoems', JSON.stringify(likedPoems));
       } catch (error) {
         console.error('Error liking poem:', error);
