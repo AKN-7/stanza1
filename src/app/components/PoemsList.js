@@ -3,16 +3,15 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const adminPassword = "diesel"; // Admin password
+const adminPassword = "diesel";
 
 const PoemsList = () => {
   const [poems, setPoems] = useState([]);
-  const [password, setPassword] = useState(""); // State to manage the password
+  const [password, setPassword] = useState("");
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
-    // Load poems and likes from the server on component mount
     const fetchData = async () => {
       try {
         const response = await axios.get(`${API_URL}/poems`);
@@ -23,17 +22,17 @@ const PoemsList = () => {
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 5000); // Poll every 5 seconds
+    const interval = setInterval(fetchData, 5000);
 
-    return () => clearInterval(interval); // Clean up interval on unmount
+    return () => clearInterval(interval);
   }, [API_URL]);
 
   const handleClearStorage = async () => {
     if (password === adminPassword) {
       try {
-        await axios.delete(`${API_URL}/poems`); // Ensure this matches the backend route
+        await axios.delete(`${API_URL}/poems`);
         setPoems([]);
-        localStorage.removeItem('likedPoems'); // Clear liked poems
+        localStorage.removeItem('likedPoems');
       } catch (error) {
         console.error('Error clearing poems:', error);
       }
@@ -52,7 +51,7 @@ const PoemsList = () => {
         const updatedPoem = response.data;
         setPoems(poems.map((p, i) => (i === index ? updatedPoem : p)));
 
-        likedPoems[poem._id] = true; // Mark poem as liked
+        likedPoems[poem._id] = true;
         localStorage.setItem('likedPoems', JSON.stringify(likedPoems));
       } catch (error) {
         console.error('Error liking poem:', error);
