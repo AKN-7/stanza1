@@ -10,7 +10,7 @@ const DailyPrompt = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://stanza1.vercel.app/api';
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -36,7 +36,7 @@ const DailyPrompt = () => {
       setTimeout(() => setIsSubmitted(false), 1000);
 
       try {
-        const response = await axios.post(`${API_URL}/poems`, {
+        const response = await axios.post(`${API_URL}/api/poems`, {
           stanzaType,
           content: inputValue,
         });

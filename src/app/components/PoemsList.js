@@ -3,18 +3,19 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const adminPassword = "diesel";
+const adminPassword = "diesel"; // Admin password
 
 const PoemsList = () => {
   const [poems, setPoems] = useState([]);
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState(""); // State to manage the password
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://stanza1.vercel.app/api';
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
+    // Load poems and likes from the server on component mount
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${API_URL}/poems`);
+        const response = await axios.get(`${API_URL}/api/poems`);
         setPoems(response.data);
       } catch (error) {
         console.error('Error fetching poems:', error);
@@ -22,17 +23,17 @@ const PoemsList = () => {
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 5000);
+    const interval = setInterval(fetchData, 5000); // Poll every 5 seconds
 
-    return () => clearInterval(interval);
+    return () => clearInterval(interval); // Clean up interval on unmount
   }, [API_URL]);
 
   const handleClearStorage = async () => {
     if (password === adminPassword) {
       try {
-        await axios.delete(`${API_URL}/poems`);
+        await axios.delete(`${API_URL}/api/poems`); // Ensure this matches the backend route
         setPoems([]);
-        localStorage.removeItem('likedPoems');
+        localStorage.removeItem('likedPoems'); // Clear liked poems
       } catch (error) {
         console.error('Error clearing poems:', error);
       }
@@ -47,11 +48,11 @@ const PoemsList = () => {
 
     if (!likedPoems[poem._id]) {
       try {
-        const response = await axios.post(`${API_URL}/poems/${poem._id}/like`);
+        const response = await axios.post(`${API_URL}/api/poems/${poem._id}/like`);
         const updatedPoem = response.data;
         setPoems(poems.map((p, i) => (i === index ? updatedPoem : p)));
 
-        likedPoems[poem._id] = true;
+        likedPoems[poem._id] = true; // Mark poem as liked
         localStorage.setItem('likedPoems', JSON.stringify(likedPoems));
       } catch (error) {
         console.error('Error liking poem:', error);
