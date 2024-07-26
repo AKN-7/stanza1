@@ -10,7 +10,7 @@ const DailyPrompt = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://stanza1.vercel.app';
 
   const handleInputChange = (e) => {
     const value = e.target.value;

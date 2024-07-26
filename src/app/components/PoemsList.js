@@ -9,7 +9,7 @@ const PoemsList = () => {
   const [poems, setPoems] = useState([]);
   const [password, setPassword] = useState(""); // State to manage the password
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://stanza1.vercel.app';
 
   useEffect(() => {
     // Load poems and likes from the server on component mount
